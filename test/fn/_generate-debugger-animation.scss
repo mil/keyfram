@@ -66,9 +66,10 @@
     $expected-output: (
       some-selector: (
         "content": (
-        0ms: ("\a.a [background]: 0ms::black => 200ms::green (200ms)\a.b [background]: 0ms::black => 300ms::green (300ms)", step-end),
-        200ms: ("\a.a [background]: 0ms::black => 200ms::green (200ms)\a.b [background]: 0ms::black => 300ms::green (300ms)\a.a [background]: 200ms::green => 500ms::white (300ms)", step-end),
-        300ms: ("\a.a [background]: 0ms::black => 200ms::green (200ms)\a.b [background]: 0ms::black => 300ms::green (300ms)\a.a [background]: 200ms::green => 500ms::white (300ms)\a.b [background]: 300ms::green => 700ms::purple (400ms)", step-end))
+          0ms: (".a [background]: 0ms::black → 200ms::green (200ms)\a.b [background]: 0ms::black → 300ms::green (300ms)", step-end),
+          200ms: (".a [background]: 0ms::black → 200ms::green (200ms)\a.b [background]: 0ms::black → 300ms::green (300ms)\a.a [background]: 200ms::green → 500ms::white (300ms)", step-end),
+          300ms: (".a [background]: 0ms::black → 200ms::green (200ms)\a.b [background]: 0ms::black → 300ms::green (300ms)\a.a [background]: 200ms::green → 500ms::white (300ms)\a.b [background]: 300ms::green → 700ms::purple (400ms)", step-end)
+        )
       ),
       _kf-map-type: eptv,
       _kf-duration: 700ms
