@@ -1,5 +1,4 @@
-# Kf - Sass Keyframe Animation Library
-[![Build Status](https://travis-ci.org/mil/kf-sass.svg?branch=master)](https://travis-ci.org/mil/kf-sass)
+# Kf - Sass Keyframe Animation Library [![Build Status](https://travis-ci.org/mil/kf-sass.svg?branch=master)](https://travis-ci.org/mil/kf-sass)
 
 **Kf** is a SCSS library which makes composing CSS keyframe-based animations simple.
 
