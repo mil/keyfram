@@ -1,0 +1,31 @@
+@function _reorder-map-hierarchy($map, $eptv-ordering) {
+  @if map-get($map, _kf-sleep) { @return $map; }
+  $map-type: map-get($map, _kf-map-type);
+  @if $map-type == $eptv-ordering { @return $map; }
+
+  $eptv-list: ();
+  @for $i from 1 through str-length($eptv-ordering) {
+    $eptv-list: append($eptv-list, str-slice($eptv-ordering, $i, $i));
+  }
+
+  // Re-order
+  $return-map: ();
+  @each $a, $bcd in map-remove($map, _kf-map-type) {
+    @each $b, $cd in $bcd {
+      @each $c, $d in $cd {
+        $vals: ($a, $b, $c, $d);
+        $rord: ();
+        @each $letter in $eptv-list {
+          $index: str-index($map-type, $letter);
+          $rord: append($rord, (nth($vals, $index)));
+        }
+        $return-map: _deep-map-merge(
+          $return-map,
+          (nth($rord, 1): (nth($rord, 2): (nth($rord, 3): nth($rord,4))))
+        );
+      }
+    }
+  }
+
+  @return map-merge($return-map, (_kf-map-type: $eptv-ordering));
+}

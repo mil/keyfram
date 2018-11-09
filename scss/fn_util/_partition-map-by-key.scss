@@ -1,0 +1,14 @@
+@function _partition-map-by-key($map, $function) {
+  $partitioned-map-keys: _partition-list(
+    map-keys($map),
+    $function
+  );
+
+  $a: _limit-map-keys($map, nth($partitioned-map-keys, 1));
+  $b: _limit-map-keys($map, nth($partitioned-map-keys, 2));
+
+  @return (
+    $a,
+    $b
+  );
+}

@@ -1,0 +1,45 @@
+@function _get-value-and-atf($v) {
+  @if type-of($v) == list and list-separator($v) == comma {
+    @return (value: nth($v, 1), animation-timing-function: nth($v, 2));
+  } @else {
+    @return (value: $v);
+  }
+}
+
+@function _get-value-and-atf-with-lookahead($v, $lookahead-for-atf-v)  {
+  @return (
+    value: map-get(_get-value-and-atf($v), value),
+    animation-timing-function: map-get(
+      _get-value-and-atf($lookahead-for-atf-v),
+      animation-timing-function
+    )
+  );
+}
+
+@function _convert-absolute-timings-to-percentages($times, $total-length) {
+  $times: if(type-of($times) != 'list', ($times,), $times);
+  @return _change-list-seperator(_map-function($times, _to-percentage, $total-length), comma);
+}
+
+@function _make-animation-sets($animation-sets, $animation-length) {
+  $return-list-of-maps: ();
+  @each $property, $timings-to-value in $animation-sets {
+    $n: 0;
+    @each $times, $value in $timings-to-value {
+      $n: $n + 1;
+
+      $map-percentage-and-property: (
+        percent-list: _convert-absolute-timings-to-percentages($times, $animation-length),
+        property: $property,
+      );
+      $map-value-and-atf:  _get-value-and-atf-with-lookahead(
+        $value,
+        nth(map-values($timings-to-value), if($n < length($timings-to-value), $n + 1, 1))
+      );
+
+      $push-map: map-merge($map-percentage-and-property, $map-value-and-atf);
+      $return-list-of-maps: append($return-list-of-maps, $push-map);
+    }
+  }
+  @return $return-list-of-maps;
+}

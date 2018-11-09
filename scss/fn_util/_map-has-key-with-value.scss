@@ -1,0 +1,3 @@
+@function _map-has-key-with-value($map, $key, $value) {
+  @return map-get($map, $key) == $value;
+}

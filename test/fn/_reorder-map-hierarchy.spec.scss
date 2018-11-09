@@ -1,0 +1,63 @@
+@include describe('reorder-map-hierarchy') {
+  @include it('Can reorder a maps hierarchy (eptv -> tepv)') {
+    $input: (
+      '.a': (
+        color: (200ms: black, 500ms: white),
+      ),
+      '.b': (
+        background: (200ms: blue, 400ms: purple, 500ms: green, 600ms: red)
+      ),
+      _kf-map-type: eptv
+    );
+    $expected-output: (
+      200ms: (
+        ".a": (color: black),
+        ".b": (background: blue)
+      ),
+      500ms: (
+        ".a": (color: white),
+        ".b": (background: green)
+      ),
+      400ms: (
+        ".b": (background: purple)
+      ),
+      600ms: (
+        ".b": (background: red)
+      ),
+      _kf-map-type: tepv
+    );
+    $output: _reorder-map-hierarchy($input, tepv);
+    @include assert-equal($output, $expected-output);
+  }
+
+  @include it('Can reorder a maps hierarchy (tepv -> eptv)') {
+    $input: (
+      200ms: (
+        ".a": (color: black),
+        ".b": (background: blue)
+      ),
+      500ms: (
+        ".a": (color: white),
+        ".b": (background: green)
+      ),
+      400ms: (
+        ".b": (background: purple)
+      ),
+      600ms: (
+        ".b": (background: red)
+      ),
+      _kf-map-type: tepv
+    );
+    $expected-output: (
+      '.a': (
+        color: (200ms: black, 500ms: white),
+      ),
+      '.b': (
+        background: (200ms: blue, 400ms: purple, 500ms: green, 600ms: red)
+      ),
+      _kf-map-type: eptv
+    );
+    $output: _reorder-map-hierarchy($input, eptv);
+    @include assert-equal($output, $expected-output);
+  }
+}

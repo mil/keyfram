@@ -1,0 +1,30 @@
+@function kf-ease($easing, $animation-map) {
+  $animation-map: _normalize-map-hierarchy($animation-map);
+
+  $seperated: _kf-properties-extractor($animation-map);
+  $anim-map: nth($seperated, 1);
+  $prop-map: nth($seperated, 2);
+
+  $return-map: ();
+  @each $s, $ptv in $anim-map {
+    $ptv-m: ();
+    @each $p, $tv in $ptv {
+      $tv-m: ();
+      @each $t, $v in $tv {
+        $new-v: $v;
+        @if type-of($v) != list {
+          $new-v: ($v, $easing);
+        }
+        $tv-m: map-merge($tv-m, ($t: $new-v));
+      }
+      $ptv-m: map-merge($ptv-m, ($p: $tv-m));
+    }
+    $return-map: map-merge($return-map, ($s: $ptv-m));
+  }
+
+  @return map-merge($return-map, $prop-map);
+}
+
+@mixin kf-ease($m...) {
+  @include kf(kf-ease($m...));
+}

@@ -1,0 +1,7 @@
+@mixin _at-root-keyframes($l) {
+  @at-root {
+    @keyframes #{$l} {
+      @content;
+    }
+  }
+}

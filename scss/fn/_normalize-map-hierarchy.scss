@@ -1,0 +1,18 @@
+@function _normalize-map-hierarchy($animation-map, $map-type: eptv) {
+  @if map-get($animation-map, _kf-sleep) != null {
+    @return $animation-map;
+  }
+  $seperated: _kf-properties-extractor($animation-map);
+  $map: nth($seperated, 1);
+  $prop-map: nth($seperated, 2);
+  $map: _expand-implicit-selector($map);
+  $already-set-kf-map-type: map-get($prop-map, _kf-map-type);
+  @if map-get($prop-map, _kf-map-type) == null {
+    $map: _determine-map-type($map);
+  } @else {
+    $map: map-merge($map, (_kf-map-type: $already-set-kf-map-type));
+  }
+  $map: _reorder-map-hierarchy($map, $map-type);
+  $map: _expand-compound-selectors($map);
+  @return map-merge(map-merge($map, $prop-map), (_kf-map-type: $map-type));
+}

@@ -1,0 +1,33 @@
+@function kf-chain($chained-maps...) {
+  $chained-maps: _map-function($chained-maps, _normalize-map-hierarchy, tepv);
+  $new-duration: _list-sum(_map-function($chained-maps, _calculate-animation-length));
+
+  $return-map: ();
+  $last-timing: 0ms;
+  $i: 0;
+  @each $m in $chained-maps {
+    $i: $i + 1;
+    @if map-has-key($m, _kf-sleep) {
+      $last-timing: $last-timing + map-get($m, _kf-sleep);
+      @if length($chained-maps) == $i {
+        $return-map: map-merge($return-map, (_kf-duration: $last-timing));
+      }
+    } @else {
+      $new-map: ();
+      $seperated: _kf-properties-extractor($m);
+      $anim-map: nth($seperated, 1);
+      @each $t, $epv in $anim-map {
+        $timing: $last-timing + $t;
+        $new-map: map-merge($new-map, ($timing: $epv))
+      }
+      $return-map: map-merge($return-map, $new-map);
+      $last-timing: $last-timing + _calculate-animation-length(map-merge($m, (_kf-map-type: tepv))) + 1ms;
+    }
+  }
+
+  @return map-merge($return-map, (_kf-map-type: tepv, _kf-duration: $new-duration));
+}
+
+@mixin kf-chain($m...) {
+  @include kf(kf-chain($m...));
+}

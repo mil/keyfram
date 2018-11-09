@@ -1,0 +1,9 @@
+@function _deep-map-merge($map-one, $map-two) {
+  @if type-of($map-one) != map or type-of($map-two) != map {
+    @return $map-two;
+  }
+  @each $k, $v in $map-two {
+    $map-one: map-merge($map-one, ($k: _deep-map-merge(map-get($map-one, $k), $v)));
+  }
+  @return $map-one;
+}

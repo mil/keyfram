@@ -1,0 +1,11 @@
+@function kf-pipeline($pipeline-function-name) {
+  @if not function-exists($pipeline-function-name) {
+    @error Could not use function #{$pipeline-function-name} as a pipeline function because a function with that name does not exist;
+  }
+
+  $_kf-pipeline-function: $pipeline-function-name;
+}
+
+@mixin kf-pipeline($m...) {
+  $_: kf-pipeline($pipeline-function-name);
+}

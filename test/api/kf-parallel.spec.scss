@@ -1,0 +1,37 @@
+@include describe('kf-parallel') {
+  @include it('Merges seperate animation-maps to play in parallel') {
+    $input-maps: (
+      ('.a': (background: (0ms: blue, 1s: red))),
+      ('.b': (margin-left: (0ms: 20px, 1s: 200px)))
+    );
+    $expected-output: (
+      _kf-map-type: eptv,
+      ".a": (background: (0ms: blue, 1s: red)),
+      ".b": (margin-left: (0ms: 20px, 1s: 200px))
+    );
+
+    @include assert-equal(
+      kf-parallel($input-maps...),
+      $expected-output
+    );
+  }
+
+
+  @include it('Merges seperate animation-maps with different kf-duration values') {
+    $input-maps: (
+      ('.a': (background: (0ms: blue, 1s: red)), _kf-duration: 3000ms),
+      ('.b': (margin-left: (0ms: 20px, 1s: 200px)))
+    );
+    $expected_output: (
+      _kf-map-type: eptv,
+      ".a": (background: (0ms: blue, 1s: red)),
+      _kf-duration: 3000ms,
+      ".b": (margin-left: (0ms: 20px, 1s: 200px))
+    );
+
+    @include assert-equal(
+      kf-parallel($input-maps...),
+      $expected-output
+    );
+  }
+}

@@ -1,0 +1,5 @@
+@function _new-map() {
+  $m: (a: b);
+  $m: map-remove($m, a);
+  @return $m;
+}

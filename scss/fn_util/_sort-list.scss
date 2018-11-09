@@ -1,0 +1,41 @@
+@function _sort-list($list) {
+  // Insertion sort implementation
+  @if length($list) <= 1 { @return $list; }
+  $final: ();
+  $final: append($final, nth($list, 1));
+
+  @for $i from 2 through length($list) {
+    $compare-to-item: nth($list, $i);
+    $final-half-one: ();
+    $final-half-two: ();
+
+    @each $final-item in $final {
+      $in-front: _sort-list-cmp($compare-to-item, $final-item);
+
+      @if $in-front {
+        $final-half-one: append($final-half-one, $final-item);
+      } @else {
+        $final-half-two: append($final-half-two, $final-item);
+      }
+    }
+
+    $final-half-one: append($final-half-one, $compare-to-item);
+    $final: join($final-half-one, $final-half-two);
+  }
+
+  @return $final;
+}
+
+@function _sort-list-cmp($a, $b) {
+  $in-front: false;
+  @if type-of($a) == number and type-of($b) == number {
+    $in-front: $b < $a;
+  } @else if type-of($a) == string and type-of($b) == string {
+    $in-front: _compare-strings($b, $a) < 0;
+  } @else if type-of($a) == type-of($b) {
+    $in-front: _compare-strings(inspect($b), inspect($a)) < 0;
+  } @else {
+    $in-front: _compare-strings(type-of($b), type-of($a)) < 0;
+  }
+  @return $in-front;
+}

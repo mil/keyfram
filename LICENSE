@@ -1,0 +1,11 @@
+// Kf is a Sass library that generates animation CSS keyframes from Sass maps.
+// 
+// Documentation: http://kf-sass.com
+// Github:        http://github.com/mil/kf-sass
+
+// "BUY MILES A BEER LICENSE" (Revision 26):
+// Miles Alan <m@milesalan.com> wrote this library. As long as you retain the
+// full text of this license in your project or derivative work, you can do
+// whatever you want with this thing. Also, if someday we meet and you want
+// to buy me a beer as a token of gratitude, then you should.
+

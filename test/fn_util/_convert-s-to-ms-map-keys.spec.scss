@@ -1,0 +1,9 @@
+@include describe('_convert-s-to-ms-map-keys') {
+  @include it('Converts second unit map keys to ms') {
+    $input: (20s: blue, 1s: black, 200ms: purple);
+    $expected-output: (20000ms: blue, 1000ms: black, 200ms: purple);
+
+    $output: _convert-s-to-ms-map-keys($input);
+    @include assert-equal($output, $expected-output);
+  }
+}

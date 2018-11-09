@@ -1,0 +1,14 @@
+@mixin _debugger-styles() {
+  $p: 10px;
+  font-size: 12px;
+  content: "";
+  display: block;
+  background: rgba(#e8e8e8, 0.8);
+  border: 1px solid #888888;
+  position: fixed;
+  bottom: $p;
+  right: $p;
+  padding: $p / 2;
+  z-index: 99999999;
+  white-space: pre-wrap;
+}

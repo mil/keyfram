@@ -1,0 +1,21 @@
+@function kf-parallel($m...) {
+  $m: _map-function($m, _normalize-map-hierarchy);
+  $seperated-list: _map-function($m, _kf-properties-extractor);
+  $r: (_kf-map-type: eptv);
+
+  @each $n in $seperated-list {
+    $r: _deep-map-merge($r, nth($n, 1));
+    $kf-duration: map-get(nth($n, 2), _kf-duration);
+    @if $kf-duration != null {
+      $old-duration: map-get($r, _kf-duration);
+      $new-duration: if($old-duration != null, max($old-duration, $kf-duration), $kf-duration);
+      $r: map-merge($r, (_kf-duration: $new-duration));
+    }
+  }
+
+  @return $r;
+}
+
+@mixin kf-parallel($m...) {
+  @include kf(kf-parallel($m...));
+}

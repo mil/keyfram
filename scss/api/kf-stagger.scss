@@ -1,0 +1,23 @@
+@function kf-stagger($stagger-duration, $list-of-animations...) {
+  $i: 0;
+  $return-animation: null;
+
+  @each $animation in $list-of-animations {
+    @if $i == 0 {
+      $return-animation: $animation;
+    } @else {
+      $old-duration: _calculate_animation_length($return-animation);
+      $return-animation: kf-parallel(
+        $return-animation,
+        kf-lead($old-duration + $stagger-duration, $animation)
+      );
+    }
+    $i: $i + 1;
+  }
+
+  @return $return-animation;
+}
+
+@mixin kf-stagger($m...) {
+  @include kf(kf-stagger($m...));
+}

@@ -1,0 +1,54 @@
+@include describe('kf-stretch') {
+  @include it('Properly stretches the nm maps timing values by the multiplier') {
+    $input: (
+      '.a': (background: (200ms: black, 800ms: blue))
+    );
+    $expected-output: (
+      500ms: (".a": (background: black)),
+      2000ms: (".a": (background: blue)),
+      _kf-map-type: tepv,
+      _kf-duration: 2000ms
+    );
+
+    @include assert-equal(
+      kf-stretch(2.5, $input),
+      $expected-output
+    );
+  }
+
+  @include it('Properly stretches the nm map to the specified duration') {
+    $input: (
+      '.a': (background: (200ms: black, 800ms: blue))
+    );
+    $expected-output: (
+      250ms: (".a": (background: black)),
+      1000ms: (".a": (background: blue)),
+      _kf-map-type: tepv,
+      _kf-duration: 1000ms
+    );
+
+    @include assert-equal(
+      kf-stretch(1s, $input),
+      $expected-output
+    );
+  }
+
+
+  @include it('Works when _kf-duration is specified in input map') {
+    $input: (
+      '.a': (background: (200ms: black, 800ms: blue)),
+      _kf-duration: 5000ms
+    );
+    $expected-output: (
+      400ms: (".a": (background: black)),
+      1600ms: (".a": (background: blue)),
+      _kf-map-type: tepv,
+      _kf-duration: 10000ms
+    );
+
+    @include assert-equal(
+      kf-stretch(2, $input),
+      $expected-output
+    );
+  }
+}

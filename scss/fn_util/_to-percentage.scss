@@ -1,0 +1,4 @@
+@function _to-percentage($numerator, $divisor) {
+  @return percentage($numerator / $divisor);
+}
+

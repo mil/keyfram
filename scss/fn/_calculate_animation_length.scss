@@ -1,0 +1,32 @@
+@function _calculate_animation_length($animation-map) {
+  @if map-has-key($animation-map, _kf-duration)  {
+    @return map-get($animation-map, _kf-duration);
+  }
+  @if map-has-key($animation-map, _kf-sleep)  {
+    @return map-get($animation-map, _kf-sleep);
+  }
+
+  $animation-map: _determine-map-type($animation-map);
+  $map-type: map-get($animation-map, _kf-map-type);
+  $seperated: _kf-properties-extractor($animation-map);
+  $m: nth($seperated, 1);
+
+  // _kf-map-type can be one of (tepv, etpv, or eptv)
+  // So this is the most efficient way to extract just the timing-level keys
+  $timings: ();
+  $timings-level-in-animation-map: str-index($map-type, t);
+  @if $timings-level-in-animation-map == 1 {
+    $timings: map-keys($m);
+  } @else if $timings-level-in-animation-map == 2 {
+    $timings: _map-function(map-values($m), map-keys);
+  } @else if $timings-level-in-animation-map == 3 {
+    $timings: _map-function(
+      _list-flatten(
+        _map-function(map-values($m), map-values)
+      ),
+      map-keys
+    );
+  }
+
+  @return max(_list-flatten($timings)...);
+}

@@ -1,0 +1,53 @@
+@include describe('kf-ease') {
+  @include it('Properly sets the easing on values with un-specified easing') {
+    $input: (
+      '.a': (
+        background: (
+          0ms: blue,
+          1000ms: (purple, ease-in-out),
+          2000ms: red
+        ),
+        margin-left: (
+          0ms: 20px,
+          1030ms: 4000px,
+          1000ms: 4000px
+        )
+      ),
+      '.b': (
+        background: (
+          0ms: navy,
+          1000ms: orange,
+          2000ms: teal
+        )
+      )
+    );
+    $expected-output: (
+        '.a': (
+          background: (
+            0ms: (blue, ease-in),
+            1000ms: (purple, ease-in-out),
+            2000ms: (red, ease-in)
+          ),
+          margin-left: (
+            0ms: (20px, ease-in),
+            1030ms: (4000px, ease-in),
+            1000ms: (4000px, ease-in),
+          )
+        ),
+        '.b': (
+          background: (
+            0ms: (navy, ease-in),
+            1000ms: (orange, ease-in),
+            2000ms: (teal, ease-in)
+          )
+        ),
+      _kf-map-type: eptv
+    );
+
+    @include assert-equal(
+      kf-ease(ease-in, $input),
+      $expected-output
+    );
+  }
+
+}

@@ -1,0 +1,14 @@
+@function _selector-property-keyify($eptv-map) {
+  // Produces map like: (s-p: last-value, s-p2: last-value, s2-p: last-value )
+  $r: ();
+  @each $e, $ptv in $eptv-map {
+    @each $p, $tv in $ptv {
+      @if type-of($tv) == map {
+        $last-t: nth(map-keys($tv), -1);
+        $last-v: map-get($tv, $last-t);
+        $r: map-merge($r, ("#{$e}-#{$p}": (last-t: $last-t, last-v: $last-v, e: $e, p: $p)));
+      }
+    }
+  }
+  @return $r;
+}

@@ -1,0 +1,59 @@
+@include describe('_fill-from-start-and-to-end') {
+  @include it('Fills from the start') {
+    $input: (
+      '.a': (
+        margin-left: (
+          2000ms: 20px,
+          6000ms: 100px
+        ),
+        background: (
+          10ms: black
+        )
+      ),
+      '.b': (
+        color: (
+          0ms: green,
+          10000ms: blue,
+          20000ms: red
+        ),
+        margin-right: (
+          4000ms: 20px
+        )
+      )
+    );
+
+    $expected-output: (
+      ".a": (
+        background: (
+          0ms: black,
+          10ms: black,
+          20000ms: black
+        ),
+        margin-left: (
+          0ms: 20px,
+          2000ms: 20px,
+          6000ms: 100px,
+          20000ms: 100px
+        )
+      ),
+      ".b": (
+        color: (
+          0ms: green,
+          10000ms: blue,
+          20000ms: red
+        ),
+        margin-right: (
+          0ms: 20px,
+          4000ms: 20px,
+          20000ms: 20px
+        )
+      )
+    );
+
+    $output: _fill-from-start-and-to-end($input, 20000ms);
+    @include assert-equal(
+      _sort-map-keys-deep($output),
+      _sort-map-keys-deep($expected-output)
+    );
+  }
+}

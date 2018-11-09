@@ -1,0 +1,11 @@
+@function _sort-map-keys-deep($map) {
+  @if type-of($map) != map { @return $map; }
+  $return-map: _new-map();
+  $keys: _sort-list(map-keys($map));
+  @each $k in $keys {
+    $return-map: _deep-map-merge($return-map, (
+      $k: _sort-map-keys-deep(map-get($map, $k))
+    ));
+  }
+  @return $return-map;
+}

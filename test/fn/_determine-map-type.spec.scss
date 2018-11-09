@@ -1,0 +1,71 @@
+@include describe('_determine-map-type') {
+  @include it('Determine the map type of EPTV') {
+    $input: (
+      '.a': (background: (200ms: black, 500ms: white)),
+      '.b': (background: (900ms: green, 1200ms: red)),
+    );
+    $expected-output: (
+      '.a': (background: (200ms: black, 500ms: white)),
+      '.b': (background: (900ms: green, 1200ms: red)),
+      _kf-map-type: eptv
+    );
+    $output: _determine-map-type($input);
+    @include assert-equal($output, $expected-output);
+  }
+
+  @include it('Determine the map type of TEPV') {
+    $input: (
+      100ms: ('.a': (background: black), '.b': (background: white)),
+      2s:    ('.a': (background: white), '.b': (background: black)),
+    );
+    $expected-output: (
+      100ms: ('.a': (background: black), '.b': (background: white)),
+      2s:    ('.a': (background: white), '.b': (background: black)),
+      _kf-map-type: tepv
+    );
+    $output: _determine-map-type($input);
+    @include assert-equal($output, $expected-output);
+  }
+
+  @include it('Determine the map type of ETPV') {
+    $input: (
+      '.a': (200ms: (background: black), 500ms: (margin-left: 20px)),
+      '.b': (200ms: (background: white), 500ms: (margin-left: 80px))
+    );
+    $expected-output: (
+      '.a': (200ms: (background: black), 500ms: (margin-left: 20px)),
+      '.b': (200ms: (background: white), 500ms: (margin-left: 80px)),
+      _kf-map-type: etpv
+    );
+    $output: _determine-map-type($input);
+    @include assert-equal($output, $expected-output);
+  }
+
+
+  @include it('Determine the map type of ETPV (works with list keys)') {
+    $input: (
+      '.a': (200ms: (background: black), 500ms: (margin-left: 20px)),
+      '.b': (200ms: (background: white), 500ms: (margin-left: 80px))
+    );
+    $expected-output: (
+      '.a': (200ms: (background: black), 500ms: (margin-left: 20px)),
+      '.b': (200ms: (background: white), 500ms: (margin-left: 80px)),
+      _kf-map-type: etpv
+    );
+    $output: _determine-map-type($input);
+    @include assert-equal($output, $expected-output);
+  }
+
+
+  // TODO: static props
+
+  @include it('Nops if map-type already defined') {
+    $input: (
+      '.a': (background: (200ms: black, 500ms: white)),
+      '.b': (background: (900ms: green, 1200ms: red)),
+      _kf-map-type: eptv
+    );
+    $output: _determine-map-type($input);
+    @include assert-equal($output, $input);
+  }
+}

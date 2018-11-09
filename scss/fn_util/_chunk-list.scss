@@ -1,0 +1,3 @@
+@function _cast-list($input) {
+  @return if(type-of($input) != list, ($input,), $input);
+}

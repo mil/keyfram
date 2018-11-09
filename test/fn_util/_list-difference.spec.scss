@@ -1,0 +1,21 @@
+@include describe('_list-difference') {
+  @include it('Properly reports items not in second list that are in first list') {
+    @include assert-equal(
+      _list-difference(
+        (a b c z),
+        (a b)
+      ),
+      (c z)
+    );
+  }
+
+  @include it('Doesn\'t report items in second list not in first list') {
+    @include assert-equal(
+      _list-difference(
+        (a b c),
+        (z)
+      ),
+      (a b c)
+    );
+  }
+}

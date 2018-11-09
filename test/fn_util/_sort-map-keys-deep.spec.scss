@@ -1,0 +1,20 @@
+@include describe('_sort-map-keys-deep') {
+  @include it('Properly sorts the list') {
+    $input: (
+      a: b,
+      f: g,
+      c: ('.b': 1, '.a': 2, '.c': 3)
+    );
+
+    $expected-output: (
+      a: b,
+      c: ('.a': 2, '.b': 1, '.c': 3),
+      f: g
+    );
+
+    @include assert-equal(
+      _sort-map-keys-deep($input),
+      $expected-output
+    );
+  }
+}

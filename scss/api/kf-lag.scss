@@ -1,0 +1,10 @@
+@function kf-lag($duration, $animation-map) {
+  @return kf-chain(
+    $animation-map,
+    kf-sleep($duration)
+  );
+}
+
+@mixin kf-lag($m...) {
+  @include kf(kf-lag($m...));
+}

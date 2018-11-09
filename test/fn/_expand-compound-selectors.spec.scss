@@ -1,0 +1,31 @@
+@include describe('_expand-compound-selectors') {
+  @include it('Properly expands the selectors') {
+    $input: (
+      ('.a', '.b'): (prop: (200ms: black, 500ms: white)),
+    );
+    $expected-output: (
+      '.a': (prop: (200ms: black, 500ms: white)),
+      '.b': (prop: (200ms: black, 500ms: white)),
+    );
+
+    $output: _expand-compound-selectors($input);
+    @include assert-equal($output, $expected-output);
+  }
+
+  @include it('Properly nops single selectors') {
+    $input: (
+      ('.a', '.b'): (prop: (200ms: black, 500ms: white)),
+      '.c': (
+        prop: (300ms: red, 700ms: green),
+        pad-start: 20ms
+      )
+    );
+    $expected-output: (
+      '.a': (prop: (200ms: black, 500ms: white)),
+      '.b': (prop: (200ms: black, 500ms: white)),
+      '.c': (prop: (300ms: red, 700ms: green))
+    );
+    $output: _expand-compound-selectors($input);
+    @include assert-equal($output, $expected-output);
+  }
+}

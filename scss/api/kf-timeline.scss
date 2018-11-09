@@ -1,0 +1,16 @@
+@function kf-timeline($kf-timeline-map) {
+  @warn "Unsupported feature warning:";
+  @warn "kf-timeline is not fully completed - please do not use!";
+
+  $kf-parallel-list: ();
+  @each $timing, $place-map in $kf-timeline-map {
+    $sleep-amount: $timing;
+    $kf-chain-map: kf-chain(kf-sleep($sleep-amount), $place-map);
+    $kf-parallel-list: append($kf-parallel-list, $kf-chain-map);
+  }
+  @return kf-parallel($kf-parallel-list...);
+}
+
+@mixin kf-timeline($kf-timeline-map) {
+  @include kf(kf-timeline($kf-timeline-map));
+}

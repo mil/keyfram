@@ -1,0 +1,24 @@
+@include describe('_expand-implicit-selector') {
+  @include it('Properly expands the selectors') {
+    $input: (
+      (prop: (200ms: black, 500ms: white), prop2: (100ms: red, 300ms: purple))
+    );
+    $expected-output: (
+      '&': (
+        (prop: (200ms: black, 500ms: white), prop2: (100ms: red, 300ms: purple))
+      )
+    );
+    $output: _expand-implicit-selector($input);
+    @include assert-equal($output, $expected-output);
+  }
+
+  @include it('Properly nops single selectors') {
+    $input: (
+      '.top': (
+        (prop: (200ms: black, 500ms: white), prop2: (100ms: red, 300ms: purple))
+      )
+    );
+    $output: _expand-implicit-selector($input);
+    @include assert-equal($input, $output);
+  }
+}

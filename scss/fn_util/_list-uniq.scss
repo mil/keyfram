@@ -1,0 +1,11 @@
+@function _list-uniq($items) {
+  $uniq: ();
+  @each $item in $items {
+    $is-missing: index($uniq, $item) == null;
+    @if $is-missing {
+      $uniq: append($uniq, $item);
+    }
+  }
+  @return $uniq;
+}
+

@@ -1,0 +1,40 @@
+@include describe('make-animation-sets') {
+  @include it('Convert PTV map into list of maps for kf mixin converting timings to percentages') {
+    $input: (
+      prop: (200ms: black, 500ms: white),
+      prop2: (200ms: blue, 400ms: purple, 500ms: green, 600ms: red)
+    );
+
+    $expected-output: (
+      (percent-list: (10%,), property: prop, value: black, animation-timing-function: null)
+      (percent-list: (25%,), property: prop, value: white, animation-timing-function: null)
+      (percent-list: (10%,), property: prop2, value: blue, animation-timing-function: null)
+      (percent-list: (20%,), property: prop2, value: purple, animation-timing-function: null)
+      (percent-list: (25%,), property: prop2, value: green, animation-timing-function: null)
+      (percent-list: (30%,), property: prop2, value: red, animation-timing-function: null)
+    );
+
+    $output: _make-animation-sets($input, 2000ms);
+    @include assert-equal($output, $expected-output);
+  }
+
+
+  @include it('Convert PTV map into list of maps works with ATF lookahead') {
+    $input: (
+      prop: (200ms: (black, ease-in), 500ms: (white, linear)),
+      prop2: (200ms: blue, 400ms: purple, 500ms: green, 600ms: red)
+    );
+
+    $expected-output: (
+      (percent-list: (10%,), property: prop, value: black, animation-timing-function: linear)
+      (percent-list: (25%,), property: prop, value: white, animation-timing-function: ease-in)
+      (percent-list: (10%,), property: prop2, value: blue, animation-timing-function: null)
+      (percent-list: (20%,), property: prop2, value: purple, animation-timing-function: null)
+      (percent-list: (25%,), property: prop2, value: green, animation-timing-function: null)
+      (percent-list: (30%,), property: prop2, value: red, animation-timing-function: null)
+    );
+    $output: _make-animation-sets($input, 2000ms);
+    @include assert-equal($output, $expected-output);
+  }
+
+}

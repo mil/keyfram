@@ -1,0 +1,9 @@
+@function _list-difference($a, $b) {
+  $difference: ();
+  @each $ai in $a {
+    @if index($b, $ai) == null {
+      $difference: append($difference, $ai);
+    }
+  }
+  @return $difference;
+}

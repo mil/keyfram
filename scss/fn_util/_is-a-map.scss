@@ -1,0 +1,3 @@
+@function _is-a-map($input) {
+  @return type-of($input) == map;
+}

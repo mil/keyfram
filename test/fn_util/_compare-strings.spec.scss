@@ -1,0 +1,9 @@
+@include describe('_compare-strings') {
+  @include it('Properly compares strings ordering') {
+    @include assert-equal(_compare-strings("test", "best"), 1);
+    @include assert-equal(_compare-strings("best", "test"), -1);
+    @include assert-equal(_compare-strings("a", "one"), -1);
+    @include assert-equal(_compare-strings("one", "one"), 0);
+    @include assert-equal(_compare-strings("on", "one"), -1);
+  }
+}

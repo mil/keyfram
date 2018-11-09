@@ -1,0 +1,40 @@
+@include describe('kf-timeline') {
+  @include it('Properly creates an animation map from a timeline map') {
+    $input: (
+      0ms: (
+        0ms: ('.a': (background: red)),
+        500ms: ('.a': (background: blue))
+      ),
+      2000ms: (
+        0ms: ('.b': (background: purple)),
+        500ms: ('.b': (background: green))
+      ),
+      4000ms: (
+        0ms: ('.a': (background: purple)),
+        500ms: ('.a': (background: green)),
+        1500ms: ('.b': (background: orange))
+      )
+    );
+    $expected-output: (
+      '.a': (background: (
+        0ms: red,
+        500ms: blue,
+        4000ms: purple,
+        4500ms: green
+      )),
+      '.b': (background: (
+        2000ms: purple,
+        2500ms: green,
+        5500ms: orange
+      )),
+      _kf-map-type: eptv,
+      _kf-duration: 5500ms
+    );
+
+    @include assert-equal(
+      kf-timeline($input),
+      $expected-output
+    );
+  }
+
+}

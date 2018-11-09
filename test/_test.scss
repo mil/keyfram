@@ -1,0 +1,39 @@
+@import "../node_modules/sass-true/sass/true";
+@import '../scss/kf';
+@import '_test_helpers';
+
+@import 'fn_util/_sort-list.spec';
+@import 'fn_util/_compare-strings.spec';
+@import 'fn_util/_sort-map-keys-deep.spec';
+@import 'fn_util/_convert-s-to-ms-map-keys.spec';
+@import 'fn_util/_is-context-within-selector.spec';
+@import 'fn_util/_filter-function.spec';
+@import 'fn_util/_list-difference.spec';
+@import 'fn_util/_is-a-css-property-name.spec';
+@import 'fn_util/_partition-list.spec';
+@import 'fn_util/_limit-map-keys.spec';
+@import 'fn_util/_list-flatten.spec';
+@import 'fn_util/_list-uniq.spec';
+@import 'fn_util/_partition-map-by-key.spec';
+
+@import 'fn/_calculate_animation_length.spec';
+//@import 'fn/_expand-compound-selectors.spec'; // Not compatible with Node Sass
+@import 'fn/_expand-implicit-selector.spec';
+@import 'fn/_expand-super-selectors.spec';
+@import 'fn/_reorder-map-hierarchy.spec';
+@import 'fn/_fill-from-start-and-to-end.spec';
+@import 'fn/_determine-map-type.spec';
+@import 'fn/_make-animation-sets';
+@import 'fn/_generate-debugger-animation';
+
+@import 'api/kf.spec';
+@import 'api/kf-chain.spec';
+@import 'api/kf-stretch.spec';
+@import 'api/kf-timeline.spec';
+@import 'api/kf-reverse.spec';
+@import 'api/kf-ease.spec';
+@import 'api/kf-parallel.spec';
+@import 'api/kf-loop.spec';
+@import 'api/kf-stagger.spec';
+
+@include report;

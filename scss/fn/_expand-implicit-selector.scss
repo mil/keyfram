@@ -1,0 +1,16 @@
+@function _is-greater-than-three-level-map($map) {
+  @each $v in _filter-function(map-values($map), _is-a-map) {
+    @each $v2 in _filter-function(map-values($v), _is-a-map) {
+      @if type-of($v2) == map { @return true; }
+    }
+  }
+  @return false;
+}
+
+@function _expand-implicit-selector($map) {
+  @if _is-greater-than-three-level-map($map) {
+    @return $map;
+  } @else {
+    @return ('&': $map);
+  }
+}

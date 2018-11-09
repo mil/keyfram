@@ -1,0 +1,20 @@
+@function _expand-super-selectors($eptv-map) {
+  // Expand all super-selectors animations to apply to their sub-selectors
+  // E.g. so if an animation applies for 'div' - it will also apply for div:nth-child(1)
+  $return-map: ();
+  $i: 0;
+  @each $e, $ptv in $eptv-map {
+    $i: $i + 1;
+    $j: 0;
+    @if $e != '&' and $e != '&:before' {
+      @each $e2, $ptv2 in $eptv-map {
+        $j: $j + 1;
+        @if $i != $j and $e2 != '&' and $e2 != '&:before' and is-superselector($e, $e2) {
+          $return-map: _deep-map-merge($return-map, ($e2: $ptv));
+        }
+      }
+    }
+    $return-map: _deep-map-merge($return-map, ($e: $ptv));
+  }
+  @return $return-map;
+}

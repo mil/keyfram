@@ -1,0 +1,25 @@
+@include describe('_is-a-css-property-name') {
+  @include it('Returns true if input is a property name') {
+    @include assert-true(_is-a-css-property-name(margin-left));
+    @include assert-true(_is-a-css-property-name(background));
+    @include assert-true(_is-a-css-property-name(color));
+  }
+
+  @include it('Returns true if input is a prefix property name') {
+    @include assert-true(_is-a-css-property-name(-webkit-margin-left));
+    @include assert-true(_is-a-css-property-name(-moz-something));
+    @include assert-true(_is-a-css-property-name(--some-css-variable));
+  }
+
+  @include it('Returns false if input is not a property name') {
+    @include assert-false(_is-a-css-property-name(potatoe));
+    @include assert-false(_is-a-css-property-name(div));
+    @include assert-false(_is-a-css-property-name(body));
+  }
+
+  @include it('Returns false if input is not a string') {
+    @include assert-false(_is-a-css-property-name((one: two)));
+    @include assert-false(_is-a-css-property-name(22));
+    @include assert-false(_is-a-css-property-name((one two three)));
+  }
+}

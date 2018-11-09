@@ -1,0 +1,34 @@
+@include describe('_is-context-within-selector') {
+  .a .b {
+    $one: _is-context-within-selector('.a');
+    @include it('Returns true if context called from is within the selector') {
+      @include assert-equal($one, true);
+    }
+  }
+
+  .c .b {
+    $two: _is-context-within-selector('.a');
+    @include it('Returns false if context called from is not within the selector') {
+      @include assert-equal($two, false);
+    }
+  }
+
+  .a .b {
+    $three: _is-context-within-selector('.a .b');
+    @include it('Works with string selector') {
+      @include assert-equal($three, false);
+    }
+  }
+
+  .a .b {
+    $four: _is-context-within-selector(null);
+    @include it('Returns true if selector is null') {
+      @include assert-equal($four, true);
+    }
+  }
+
+  $five: _is-context-within-selector('.a');
+  @include it('Returns false if called from root context and has selector looking for') {
+    @include assert-equal($five, false);
+  }
+}

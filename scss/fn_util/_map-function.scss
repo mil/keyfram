@@ -1,0 +1,12 @@
+@function _map-function(
+  $list,
+  $function_name,
+  $args...
+) {
+  $return_list: ();
+  @for $index from 1 through length($list) {
+    $call-result: call(get-function($function_name), nth($list, $index), $args...);
+    $return_list: append($return_list, $call-result);
+  }
+  @return $return_list;
+}

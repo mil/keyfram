@@ -1,0 +1,21 @@
+@function filter_cond($item) { @return $item == 'a' or $item == 'b'; }
+
+@include describe('_filter-function') {
+  @include it('Properly filters the list using the provided function') {
+    $input: a b c d a;
+    $expected-output: a b a;
+    @include assert-equal(
+      _filter-function($input, filter_cond),
+      $expected-output
+    );
+  }
+
+  @include it('Nops empty lists') {
+    $input: ();
+    $expected-output: ();
+    @include assert-equal(
+      _filter-function($input, filter_cond),
+      $expected-output
+    );
+  }
+}

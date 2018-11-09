@@ -1,0 +1,8 @@
+@function kf-mirror($map) {
+  $map: _normalize-map-hierarchy($map);
+  @return kf-chain($map, kf-reverse($map));
+}
+
+@mixin kf-mirror($m...) {
+  @include kf(kf-mirror($m...));
+}

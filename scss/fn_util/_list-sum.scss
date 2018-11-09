@@ -1,0 +1,8 @@
+@function _list-sum($items) {
+  $sum: 0;
+  @each $i in $items {
+    $sum: $sum + $i;
+  }
+  @return $sum;
+}
+

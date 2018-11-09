@@ -1,0 +1,62 @@
+@function kf($kf-map, $loop: null) {
+  $globals:  _get-globals();
+  // nop
+  @if not map-get($globals, enabled) { @return (eptv-map: ()); }
+
+  // apply pipeline fn
+  $pipeline-fn: map-get($globals, pipeline-fn);
+  @if $pipeline-fn != null {
+    $kf-map: call($pipeline-fn, $kf-map);
+  }
+
+  $eptv-map: _normalize_map-hierarchy($kf-map);
+  $total-ms: _calculate-animation-length($eptv-map);
+  $seperated: _kf-properties-extractor($eptv-map);
+  $eptv-map-seperated:  nth($seperated, 1);
+  $eptv-map-seperated: _expand-super-selectors($eptv-map-seperated);
+  $eptv-map-seperated: _fill-from-start-and-to-end($eptv-map-seperated, $total-ms);
+
+  @return (
+    animation-handle: kf-#{unique-id()},
+    total-ms: $total-ms,
+    eptv-map: $eptv-map-seperated,
+    infinite-loop: if($loop != null, $loop, map-get($globals, infinite-loop)),
+    generate-debugger-animation: map-get($kf-map, _kf-debug)
+  );
+}
+
+
+@mixin kf($kf-map, $loop: null) {
+  $kf-props:         kf($kf-map, $loop);
+  $animation-handle: map-get($kf-props, animation-handle);
+  $total-ms:         map-get($kf-props, total-ms);
+  $eptv-map:         map-get($kf-props, eptv-map);
+  $infinite-loop:    map-get($kf-props, infinite-loop);
+  $debugger-enabled: map-get($kf-props, generate-debugger-animation);
+
+  @if $debugger-enabled != null { #{$debugger-enabled} { @include _debugger-styles(); } }
+
+  $i: 0;
+  @each $selector, $animation-set in $eptv-map {
+    $i: $i + 1;
+    $selector-animation-name-handle: #{$animation-handle}-#{$i};
+    @include _at-root-keyframes($selector-animation-name-handle) {
+      $kfs: _make-animation-sets($animation-set, $total-ms);
+      @each $set in $kfs {
+        #{map-get($set, percent-list)} {
+          #{map-get($set, property)}: map-get($set, value);
+          @if map-get($set, animation-timing-function) != null {
+            animation-timing-function: map-get($set, animation-timing-function);
+          }
+        }
+      }
+    }
+
+    #{$selector} {
+      animation-fill-mode: forwards;
+      animation-iteration-count: if($infinite-loop, infinite, 1);
+      animation-name: $selector-animation-name-handle;
+      animation-duration: $total-ms;
+    }
+  }
+}

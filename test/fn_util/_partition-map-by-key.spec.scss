@@ -1,0 +1,18 @@
+@function partition-map-key-test-fn($n) {
+  @return ($n % 2) == 0;
+}
+
+@include describe('_partition-map-by-key') {
+  @include it('Properly partitions the map by key based on provided fn') {
+    $input: (1: one, 2: two, 3: three, 4: four, 5: five, 6: six);
+    $expected-output: (
+      (2: two,  4: four,  6: six),
+      (1: one,  3: three, 5: five)
+    );
+
+    @include assert-equal(
+      _partition-map-by-key($input, partition-map-key-test-fn),
+      $expected-output
+    );
+  }
+}

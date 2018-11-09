@@ -1,0 +1,29 @@
+@function lists-are-same($item-a, $item-b) {
+  @if (
+    (type-of($item-a) == 'list' and type-of($item-b) != 'list') or
+    (type-of($item-a) != 'list' and type-of($item-b) == 'list')
+  ) {
+    @warn 'deep-lists-are-same comparing list to non-list';
+    @return false;
+  }
+
+  @if (type-of($item-a) == 'list') {
+    @if ( length($item-a) != length($item-b) ) {
+      @warn 'lists-are-same: length of lists are non-equal';
+      @return false;
+    }
+
+    @for $i from 1 through length($item-a) {
+      @if not lists-are-same(nth($item-a), nth($item-b)) {
+        @return false;
+      }
+    }
+  } @else {
+    @if $item-a != $item-b {
+      @warn 'list-are-same: #{$item-a} ain\'t #{$item-b}';
+      @return false;
+    }
+  }
+
+  @return true;
+}

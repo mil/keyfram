@@ -1,0 +1,34 @@
+@function kf-stretch($multiplier-or-duration, $animation-map) {
+  $animation-map: _normalize-map-hierarchy($animation-map, tepv);
+
+  $multiplier: 1;
+  $unit: unit($multiplier-or-duration);
+  $current-duration: _calculate_animation_length($animation-map);
+  @if $unit == "" {
+    $multiplier: $multiplier-or-duration;
+  } @else if $unit == "ms" or $unit == "s" {
+    $multiplier: $multiplier-or-duration / $current-duration;
+  } @else {
+    @warn Cannot use kf-stretch on unit '#{$unit}';
+  }
+  $new-total-duration: $current-duration * $multiplier;
+
+  $seperated: _kf-properties-extractor($animation-map);
+  $anim-map: nth($seperated, 1);
+  $prop-map: nth($seperated, 2);
+
+  $return-map: ();
+  @each $t, $epv in $anim-map {
+    $return-map: map-merge($return-map, (($t * $multiplier): $epv));
+  }
+
+  $prop-map: map-merge($prop-map, (_kf-duration: $new-total-duration));
+  @return map-merge(
+    $return-map,
+    $prop-map
+  );
+}
+
+@mixin kf-stretch($m...) {
+  @include kf(kf-stretch($m...));
+}

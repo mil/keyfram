@@ -1,0 +1,11 @@
+@function _list-flatten($list) {
+  $return-list: ();
+  @each $item in $list {
+    @if type-of($item) == list {
+      $return-list: join($return-list, _list-flatten($item));
+    } @else {
+      $return-list: append($return-list, $item);
+    }
+  }
+  @return $return-list;
+}

@@ -1,0 +1,51 @@
+@include describe('kf-loop') {
+  @include it('When passed a single argument (just $animation-map), it will set the _kf-inifinite-loop property to true') {
+    $input: (
+      0ms: ('.a': (background: red)),
+      500ms: ('.a': (background: blue)),
+      1400ms: ('.b': (background: purple)),
+      1900ms: ('.b': (background: green))
+    );
+    $expected-output: (
+      ".a": (background: (0ms: red, 500ms: blue)),
+      ".b": (background: (1400ms: purple, 1900ms: green)),
+      _kf-map-type: eptv,
+      _kf-infinite-loop: true
+    );
+
+    @include assert-equal(
+      kf-loop($input),
+      $expected-output
+    );
+  }
+
+  @include it('When passed 2 arguments loops $animation-map (2nd argument) number of $time (1st argument)') {
+    $input: (
+      0ms: ('.a': (background: red)),
+      500ms: ('.a': (background: blue)),
+      1400ms: ('.b': (background: purple)),
+      1900ms: ('.b': (background: green))
+    );
+    $expected-output: (
+      0ms: (".a": (background: red)),
+      500ms: (".a": (background: blue)),
+      1400ms: (".b": (background: purple)),
+      1900ms: (".b": (background: green)),
+      1901ms: (".a": (background: red)),
+      2401ms: (".a": (background: blue)),
+      3301ms: (".b": (background: purple)),
+      3801ms: (".b": (background: green)),
+      3802ms: (".a": (background: red)),
+      4302ms: (".a": (background: blue)),
+      5202ms: (".b": (background: purple)),
+      5702ms: (".b": (background: green)),
+      _kf-map-type: tepv,
+      _kf-duration: 5700ms
+    );
+
+    @include assert-equal(
+      kf-loop(3, $input),
+      $expected-output
+    );
+  }
+}

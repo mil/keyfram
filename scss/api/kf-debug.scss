@@ -1,0 +1,23 @@
+@function kf-debug($args...) {
+  $animation-map: nth($args, 1);
+  $called-from-mixin: nth($args, 2);
+
+  @if $called-from-mixin != called-from-mixin {
+    @warn "Unsupported feature warning:";
+    @warn "_kf-debug is currently only support when used as a top-level mixin";
+    @warn "_kf-debug *may* work when used nested as a function but this is not officially support";
+  }
+
+  $debug-selector: "&:before";
+  $animation-map: kf-parallel(
+    kf-ease(step-end, _generate-debugger-animation($debug-selector, $animation-map)),
+    $animation-map
+  );
+  @return map-merge($animation-map, (_kf-debug: $debug-selector ));
+}
+
+@mixin kf-debug($animation-map) {
+  @include kf(
+    kf-debug($animation-map, called-from-mixin)
+  );
+}

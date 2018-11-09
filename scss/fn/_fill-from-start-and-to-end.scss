@@ -1,0 +1,29 @@
+@function _fill-from-start-and-to-end($eptv-map, $total-ms) {
+  $use-first-value: true;
+  $ret-map: $eptv-map;
+  $start-timing: 0ms;
+  $end-timing: 0ms + $total-ms;
+
+  @each $elem, $ptv in $ret-map {
+    @each $p, $tv in $ptv {
+      $timing-keys: _sort-list(map-keys($tv));
+
+      @each $set in (
+        (at-timing: $start-timing, from-end: false),
+        (at-timing: $end-timing, from-end: true)
+      ) {
+        $at-timing: map-get($set, at-timing);
+        $from-end: map-get($set, from-end);
+
+        @if map-get($tv, $at-timing) == null {
+          $use-key:   nth($timing-keys, if($from-end, length($timing-keys), 1));
+          $use-value: map-get($tv, $use-key);
+          $merge-map: ($elem: ($p: ($at-timing: $use-value)));
+          $ret-map:   _deep-map-merge($ret-map, $merge-map);
+        }
+      }
+    }
+  }
+
+  @return $ret-map;
+}

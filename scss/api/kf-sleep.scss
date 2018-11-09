@@ -1,0 +1,7 @@
+@function kf-sleep($duration) {
+  @return (_kf-sleep: $duration);
+}
+
+@mixin kf-sleep($duration) {
+  @include kf-sleep($duration);
+}

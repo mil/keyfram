@@ -1,0 +1,19 @@
+@include describe('_expand-super-selectors') {
+  @include it('Applies base selector animations to all super selectors') {
+    $input: (
+      '.selector': (background: (0ms: red, 1s: blue)),
+      '.super .selector': (background: (2s: green, 4s: purple))
+    );
+    $expected-output: (
+      '.super .selector': (
+        background: (0ms: red, 1s: blue, 2s: green, 4s: purple)
+      ),
+      '.selector': (
+        background: (0ms: red, 1s: blue)
+      )
+    );
+
+    $output: _expand-super-selectors($input);
+    @include assert-equal($output, $expected-output);
+  }
+}

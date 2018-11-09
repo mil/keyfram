@@ -1,0 +1,19 @@
+@function _expand-compound-selectors($eptv-map) {
+  $extracted_map: ();
+  $old-map: ();
+
+  @each $element, $ptv in $eptv-map {
+    @if type-of($element) == list {
+      @each $e in $element {
+        $extracted-map: _deep-map-merge($extracted-map, ($e: $ptv));
+      }
+    } @else {
+      $old-map: map-merge($old-map, ( $element: $ptv) );
+    }
+  }
+  @return if(
+    type-of($extracted-map) == map,
+    _deep-map-merge($old-map, $extracted-map),
+    $old-map
+  );
+}

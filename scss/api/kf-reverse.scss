@@ -1,0 +1,20 @@
+@function kf-reverse($animation-map) {
+  $animation-map: _normalize-map-hierarchy($animation-map, tepv);
+  $length: _calculate-animation-length($animation-map);
+
+  $seperated: _kf-properties-extractor($animation-map);
+  $anim-map: nth($seperated, 1);
+  $prop-map: nth($seperated, 2);
+
+  $return-map: ();
+  @each $m, $epv in $anim-map {
+    $m: abs($m + -$length);
+    $return-map: map-merge($return-map, ($m: $epv));
+  }
+
+  @return map-merge($return-map, $prop-map);
+}
+
+@mixin kf-reverse($m...) {
+  @include kf(kf-reverse($m...));
+}

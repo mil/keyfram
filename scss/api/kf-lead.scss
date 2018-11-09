@@ -1,0 +1,10 @@
+@function kf-lead($duration, $animation-map) {
+  @return kf-chain(
+    kf-sleep($duration),
+    $animation-map,
+  );
+}
+
+@mixin kf-lead($m...) {
+  @include kf(kf-lead($m...));
+}

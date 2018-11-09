@@ -1,0 +1,129 @@
+@include describe('kf-chain') {
+  @include it('Properly chains maps timings sequentially') {
+    $result: kf-chain(
+      ( '.a': (background: (0ms: blue, 500ms: red)), ),
+      ( '.a': (background: (0ms: blue, 500ms: red)), ),
+      ( '.a': (background: (0ms: blue, 500ms: red)), ),
+      ( '.a': (background: (0ms: blue, 500ms: red)), ),
+      ( '.a': (background: (0ms: blue, 500ms: red))  )
+    );
+    $expected-output: (
+      _kf-map-type: tepv,
+      _kf-duration: 2500ms,
+      0ms:    (".a": (background: blue)),
+      500ms:  (".a": (background: red)),
+      501ms:  (".a": (background: blue)),
+      1001ms: (".a": (background: red)),
+      1002ms: (".a": (background: blue)),
+      1502ms: (".a": (background: red)),
+      1503ms: (".a": (background: blue)),
+      2003ms: (".a": (background: red)),
+      2004ms: (".a": (background: blue)),
+      2504ms: (".a": (background: red))
+    );
+    @include assert-equal($result, $expected-output);
+  }
+
+
+  @include it('Works with kf-sleep() in between items') {
+    $result: kf-chain(
+      ( '.a': (background: (0ms: blue, 500ms: red)), ),
+      ( '.a': (background: (0ms: blue, 500ms: red)), ),
+      ( '.a': (background: (0ms: blue, 500ms: red)), ),
+      kf-sleep(1000ms),
+      ( '.a': (background: (0ms: blue, 500ms: red)), ),
+      ( '.a': (background: (0ms: blue, 500ms: red))  )
+    );
+    $expected-output: (
+      _kf-map-type: tepv,
+      _kf-duration: 3500ms,
+      0ms:    (".a": (background: blue)),
+      500ms:  (".a": (background: red)),
+      501ms:  (".a": (background: blue)),
+      1001ms: (".a": (background: red)),
+      1002ms: (".a": (background: blue)),
+      1502ms: (".a": (background: red)),
+      // Sleep here
+      2503ms: (".a": (background: blue)),
+      3003ms: (".a": (background: red)),
+      3004ms: (".a": (background: blue)),
+      3504ms: (".a": (background: red))
+    );
+    @include assert-equal($result, $expected-output);
+  }
+
+
+  @include it('Works with kf-sleep() as last item') {
+    $result: kf-chain(
+      ( '.a': (background: (0ms: blue, 500ms: red)), ),
+      ( '.b': (background: (0ms: blue, 500ms: red)), ),
+      ( '.a': (background: (0ms: blue, 500ms: red)), ),
+      ( '.b': (background: (0ms: blue, 500ms: red)), ),
+      ( '.a': (background: (0ms: blue, 500ms: red))  ),
+      kf-sleep(1000ms)
+    );
+    $expected-output: (
+      0ms: (".a": (background: blue)),
+      500ms: (".a": (background: red)),
+      501ms: (".b": (background: blue)),
+      1001ms: (".b": (background: red)),
+      1002ms: (".a": (background: blue)),
+      1502ms: (".a": (background: red)),
+      1503ms: (".b": (background: blue)),
+      2003ms: (".b": (background: red)),
+      2004ms: (".a": (background: blue)),
+      2504ms: (".a": (background: red)),
+      _kf-duration: 3500ms,
+      _kf-map-type: tepv
+    );
+
+    @include assert-equal($result, $expected-output);
+  }
+
+
+  // TOOD: unsupported for now
+
+  ///@include it('Holds selectors animations state when chaining different selectors') {
+  ///  $result: kf-chain(
+  ///    ( '.a': (background: (0ms: blue, 500ms: red))),
+  ///    ( '.b': (background: (2s: blue, 3s: red))),
+  ///    ( '.a': (background: (0ms: purple, 500ms: green)))
+  ///  );
+  ///  $expected-output: (
+  ///    _kf-map-type: tepv,
+  ///    _kf-duration: 4000ms,
+  ///    0ms:   (".a": (background: blue)),
+  ///    500ms: (".a": (background: red)),
+
+  ///    2.501s: (".b": (background: blue)),
+  ///    3.501s: (
+  ///      ".a": (background: red),
+  ///      ".b": (background: red)
+  ///    ),
+
+  ///    3502ms: (".a": (background: purple)),
+  ///    4002ms: (".a": (background: green))
+  ///  );
+
+  ///  @include assert-equal($result, $expected-output);
+  ///}
+
+
+  @include it('Preserves _kf-duration when nesting') {
+    $result: kf-chain(
+      kf-sleep(4000ms),
+      kf-chain(
+        ('.a': (background: (0ms: blue, 500ms: red))),
+        kf-sleep(2000ms)
+      ),
+    );
+    $expected-output: (
+      4000ms: (".a": (background: blue)),
+      4500ms: (".a": (background: red)),
+      _kf-map-type: tepv,
+      _kf-duration: 6500ms
+    );
+    @include assert-equal($result, $expected-output);
+  }
+
+}

@@ -1,0 +1,12 @@
+@function _get-globals() {
+  $default-globals: (
+    isolate: null,
+    infinite-loop: true,
+    default-ease: linear,
+    debug: false,
+    visual-debug: false,
+    enabled: true
+  );
+  $kf-globals: if(variable-exists('kf-globals') and _is-a-map($kf-globals), $kf-globals, ());
+  @return map-merge($default-globals, $kf-globals);
+}

@@ -1,0 +1,12 @@
+@include describe('_sort-list') {
+  @include it('Properly sorts the list') {
+    @include assert-equal(
+      _sort-list((10 200 60ms 80 a b c)),
+      (10 60ms 80 200 a b c)
+    );
+    @include assert-equal(
+      _sort-list(('.b' '.c' '.a')),
+      ('.a' '.b' '.c')
+    );
+  }
+}

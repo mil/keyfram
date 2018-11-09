@@ -1,0 +1,14 @@
+@function _is-context-within-selector($selector) {
+  @if $selector == null { @return true; }
+  @if & == null { @return false; }
+
+  $selector-list: nth(selector-parse($selector), 1);
+  $context-list: nth(selector-parse(&), 1);
+  @for $i from 1 through length($selector) {
+    @if nth($selector, $i) != nth($context-list, $i) {
+      @return false;
+    }
+  }
+
+  @return true;
+}

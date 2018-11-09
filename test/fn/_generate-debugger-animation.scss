@@ -1,0 +1,79 @@
+@include describe('_convert-animation-into-transition-list') {
+  @include it('Successfully converts the animation in to a list of transitions (single prop)') {
+    $input: (
+      '.a': (background: (000ms: black, 200ms: green, 500ms: white)),
+      '.b': (background: (000ms: red, 300ms: brown, 700ms: purple))
+    );
+    $expected-output: (
+      (property: background, selector: ".a", start: 0ms, duration: 200ms, from: black, to: green)
+      (property: background, selector: ".a", start: 200ms, duration: 300ms, from: green, to: white)
+      (property: background, selector: ".b", start: 0ms, duration: 300ms, from: red, to: brown)
+      (property: background, selector: ".b", start: 300ms, duration: 400ms, from: brown, to: purple)
+    );
+    $output: _convert-animation-into-transition-list($input);
+    @include assert-equal($output, $expected-output);
+  }
+
+  @include it('Successfully converts the animation in to a list of transitions (multi props)') {
+    $input: (
+      '.a': (
+        background: (000ms: black, 200ms: green, 500ms: white),
+        margin-left: (000ms: 0%, 100ms: 50%, 900ms: 100%)
+      ),
+      '.b': (
+        background: (000ms: red, 300ms: brown, 700ms: purple),
+        margin-left: (000ms: 0%, 880ms: 90%, 1200ms: 100%)
+      )
+    );
+    $expected-output: (
+      (property: background, selector: ".a", start: 0ms, duration: 200ms, from: black, to: green)
+      (property: background, selector: ".a", start: 200ms, duration: 300ms, from: green, to: white)
+
+      (property: margin-left, selector: ".a", start: 0ms, duration: 100ms, from: 0%, to: 50%)
+      (property: margin-left, selector: ".a", start: 100ms, duration: 800ms, from: 50%, to: 100%)
+
+      (property: background, selector: ".b", start: 0ms, duration: 300ms, from: red, to: brown)
+      (property: background, selector: ".b", start: 300ms, duration: 400ms, from: brown, to: purple)
+
+      (property: margin-left, selector: ".b", start: 0ms, duration: 880ms, from: 0%, to: 90%)
+      (property: margin-left, selector: ".b", start: 880ms, duration: 320ms, from: 90%, to: 100%)
+    );
+    $output: _convert-animation-into-transition-list($input);
+    @include assert-equal($output, $expected-output);
+  }
+}
+
+@include describe('_get-start-timings-from-transition-list') {
+  @include it('Gets all the start timings set in the transition list') {
+    $input: (
+      (selector: ".a", start: 0ms, duration: 200ms, from: black, to: green)
+      (selector: ".a", start: 200ms, duration: 300ms, from: green, to: white)
+      (selector: ".b", start: 0ms, duration: 300ms, from: red, to: brown)
+      (selector: ".b", start: 300ms, duration: 400ms, from: brown, to: purple)
+    );
+    $expected-output: (0ms 200ms 300ms);
+    $output: _get-start-timings-from-transition-list($input);
+    @include assert-equal($output, $expected-output);
+  }
+}
+
+@include describe('_generate-debugger-animation') {
+  @include it('Generates the debugger animation properly (single prop multi props)') {
+    $input: (
+      '.a': (background: (000ms: black, 200ms: green, 500ms: white)),
+      '.b': (background: (000ms: black, 300ms: green, 700ms: purple))
+    );
+    $expected-output: (
+      some-selector: (
+        "content": (
+        0ms: ("\a.a [background]: 0ms::black => 200ms::green (200ms)\a.b [background]: 0ms::black => 300ms::green (300ms)", step-end),
+        200ms: ("\a.a [background]: 0ms::black => 200ms::green (200ms)\a.b [background]: 0ms::black => 300ms::green (300ms)\a.a [background]: 200ms::green => 500ms::white (300ms)", step-end),
+        300ms: ("\a.a [background]: 0ms::black => 200ms::green (200ms)\a.b [background]: 0ms::black => 300ms::green (300ms)\a.a [background]: 200ms::green => 500ms::white (300ms)\a.b [background]: 300ms::green => 700ms::purple (400ms)", step-end))
+      ),
+      _kf-map-type: eptv,
+      _kf-duration: 700ms
+    );
+    $output: _generate-debugger-animation(some-selector, $input);
+    @include assert-equal($output, $expected-output);
+  }
+}

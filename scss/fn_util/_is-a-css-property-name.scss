@@ -1,0 +1,9 @@
+@function _is-a-css-property-name($str) {
+  @if type-of($str) != string {
+    @return false;
+  }
+  @if str-slice($str, 1, 1) == "-" {
+    @return true;
+  }
+  @return type-of(index($valid-prop-names, $str)) == number;
+}

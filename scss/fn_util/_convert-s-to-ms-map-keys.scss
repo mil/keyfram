@@ -1,0 +1,9 @@
+@function _convert-s-to-ms-map-keys($map) {
+  @each $k, $v in $map {
+    @if unit($k) == s {
+      $map: map-remove($map, $k);
+      $map: map-merge($map, (0ms + $k: $v));
+    }
+  }
+  @return $map;
+}

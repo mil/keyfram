@@ -1,0 +1,11 @@
+@include describe('_limit-map-keys') {
+  @include it('Returns the map with only limited map keys') {
+    @include assert-equal(
+      _limit-map-keys(
+        (1: one, 2: two, 3: three, 4: four, 5: five, 6: six),
+        (1, 5, 6)
+      ),
+      (1: one, 5: five, 6: six)
+    );
+  }
+}

@@ -1,0 +1,13 @@
+@function _limit-map-keys($map, $list-of-keys) {
+  $r: _new-map();
+
+  @each $l in $list-of-keys {
+    @if map-has-key($map, $l) {
+      $r: map-merge(
+        $r, ($l: map-get($map, $l))
+      );
+    }
+  }
+
+  @return $r;
+}

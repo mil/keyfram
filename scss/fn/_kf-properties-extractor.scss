@@ -1,0 +1,14 @@
+@function _is-not-kf-property($v) {
+  @return not (
+    type-of($v) == string and
+    str-slice($v, 1, 4) == _kf-
+  );
+
+}
+
+@function _kf-properties-extractor($map) {
+  @return _partition-map-by-key(
+    $map,
+    _is-not-kf-property
+  );
+}

@@ -1,0 +1,24 @@
+@function kf-loop($args...) {
+  @if length($args) == 1 {
+    $animation-map: nth($args, 1);
+    $animation-map: _normalize-map-hierarchy($animation-map);
+    @return map-merge($animation-map, (_kf-infinite-loop: true));
+  } @else if length($args) == 2 {
+    $times: nth($args, 1);
+    $animation-map: nth($args, 2);
+    $animation-map: _normalize-map-hierarchy($animation-map);
+    $chain: ();
+    @for $i from 1 through $times {
+      $chain: append($chain, $animation-map);
+    }
+    @return kf-chain($chain...);
+  } @else {
+    @debug "Cannot use kf-loop must be used with 1-2 parameters";
+    @return ();
+  }
+}
+
+@mixin kf-loop($m...) {
+  @include kf(kf-loop($m...));
+}
+

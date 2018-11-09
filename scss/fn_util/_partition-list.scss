@@ -1,0 +1,13 @@
+@function _partition-list($list, $function) {
+  $a: ();
+  $b: ();
+  @each $item in $list {
+    $call-result: call(get-function($function), $item);
+    @if $call-result {
+      $a: append($a, $item);
+    } @else {
+      $b: append($b, $item);
+    }
+  }
+  @return ($a, $b);
+}

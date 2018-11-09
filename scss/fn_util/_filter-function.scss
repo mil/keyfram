@@ -1,0 +1,18 @@
+@function _filter-function(
+  $list,
+  $function_name,
+  $args...
+) {
+  $return_list: ();
+  @if length($list) > 0 {
+    @for $index from 1 through length($list) {
+      $call-result: null;
+      $item: nth($list, $index);
+      $call-result: call(get-function($function_name), $item, $args...);
+      @if $call-result {
+        $return_list: append($return_list, $item);
+      }
+    }
+  }
+  @return $return_list;
+}

@@ -1,0 +1,27 @@
+@function _get-value-type($v) {
+  @if type-of($v) == list { $v: nth($v, 1); }
+  @if type-of($v) == number and (unit($v) == s or unit($v) == ms) {
+    @return t;
+  }
+  @if _is-a-css-property-name($v) {
+    @return p;
+  }
+  @return e;
+}
+
+@function _determine-map-type($map) {
+  @if map-get($map, _kf-map-type) != null {
+    @return $map;
+  }
+
+  $level-1-map-keys: map-keys($map);
+  $level-2-map-keys: map-keys(map-get($map, nth($level-1-map-keys, 1)));
+  $level-3-map-keys: map-keys(map-get(map-get($map, nth($level-1-map-keys, 1)), nth($level-2-map-keys, 1)));
+
+  $level-1-value-type: _get-value-type(nth($level-1-map-keys, 1));
+  $level-2-value-type: _get-value-type(nth($level-2-map-keys, 1));
+  $level-3-value-type: _get-value-type(nth($level-3-map-keys, 1));
+
+  $_kf-map-type: $level-1-value-type + $level-2-value-type + $level-3-value-type + "v";
+  @return map-merge($map, (_kf-map-type: $_kf-map-type));
+}

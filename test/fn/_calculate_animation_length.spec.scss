@@ -1,0 +1,52 @@
+@include describe('calculate_animation_length') {
+  @include it('Works with eptv map') {
+    $m: (
+      '.a': (prop: (200ms: black, 500ms: white)),
+      '.b': (prop: (900ms: black, 1200ms: white)),
+      _kf-map-type: eptv
+    );
+    $r: _calculate_animation_length($m);
+    @include assert-equal($r, 1200ms);
+  }
+
+  @include it('Works with ptev map') {
+    $m: (
+      'prop': (200ms: ('.a': black, '.b': white)),
+      'prop2': (1800s: ('.a': black, '.b': white)),
+      _kf-map-type: ptev
+    );
+    $r: _calculate_animation_length($m);
+    @include assert-equal($r, 1800s);
+  }
+
+  @include it('Works with tepv map') {
+    $m: (
+      200ms: ('.a': (prop: black, prop2: white)),
+      1800s: ('.b': (prop: black, prop2: white)),
+      _kf-map-type: tepv
+    );
+    $r: _calculate_animation_length($m);
+    @include assert-equal($r, 1800s);
+  }
+
+  @include it('Handles multiple different units') {
+    $m: (
+      '.a': (prop: (200s: black, 500ms: white)),
+      '.b': (prop: (900ms: black, 1800s: white)),
+      _kf-map-type: eptv
+    );
+    $r: _calculate_animation_length($m);
+    @include assert-equal($r, 1800s);
+  }
+
+  @include it('Works with _kf-duration') {
+    $m: (
+      '.a': (prop: (200s: black, 500ms: white)),
+      '.b': (prop: (900ms: black, 1800s: white)),
+      _kf-map-type: eptv,
+      _kf-duration: 40s
+    );
+    $r: _calculate_animation_length($m);
+    @include assert-equal($r, 40s);
+  }
+}

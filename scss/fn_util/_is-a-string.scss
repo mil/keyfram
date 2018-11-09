@@ -1,0 +1,3 @@
+@function _is-a-string($value) {
+  @return type-of($value) == 'string';
+}

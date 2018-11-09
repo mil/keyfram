@@ -1,0 +1,8 @@
+@include describe('_list-uniq') {
+  @include it('Filters down to the unique list') {
+    @include assert-equal(
+      _list-uniq((a b b c z x z)),
+      (a b c z x)
+    );
+  }
+}

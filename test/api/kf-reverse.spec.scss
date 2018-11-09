@@ -1,0 +1,35 @@
+@include describe('kf-reverse') {
+  @include it('Properly reverse the maps timings') {
+    $result: kf-reverse(
+      (
+        '.a': (
+          background: (0ms: blue, 500ms: red),
+          margin-left: (0ms: 20px, 100ms: 40px, 1.2s: 900ms)
+        ),
+        '.b': (
+          margin-top: (0ms: 300px, 2000ms: 20px)
+        )
+      )
+    );
+    $expected-output: (
+      2000ms: (
+        ".a": (background: blue, margin-left: 20px),
+        ".b": (margin-top: 300px)
+      ),
+      1500ms: (
+        ".a": (background: red)
+      ),
+      1900ms: (
+        ".a": (margin-left: 40px)
+      ),
+      0.8s: (
+        ".a": (margin-left: 900ms)
+      ),
+      0ms: (
+        ".b": (margin-top: 20px)
+      ),
+      _kf-map-type: tepv
+    );
+    @include assert-equal($result, $expected-output);
+  }
+}

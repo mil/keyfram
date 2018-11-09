@@ -1,0 +1,99 @@
+@function _convert-animation-into-transition-list($animation-map) {
+  $animation-map: _normalize-map-hierarchy($animation-map, eptv);
+  $seperated: _kf-properties-extractor($animation-map);
+
+  $transition-list: ();
+  $m: nth($seperated, 1);
+  @each $e, $ptv in $m {
+    @each $p, $tv in $ptv {
+
+      $last-t: null;
+      $last-v: null;
+      $i: 0;
+
+      @each $t, $v in $tv {
+        $duration: 0;
+        $from: initial;
+        @if $last-t != null { $duration: $t - $last-t; }
+        @if $last-v != null { $from: $last-v; }
+
+        // E.g. don't put initial state value, only worried about *transitions*
+        @if $i > 0 {
+          $transition-list: append($transition-list, (
+            property: $p,
+            selector: $e,
+            start: $last-t,
+            duration: $duration,
+            from: $from,
+            to: $v
+          ));
+        }
+
+        $i: $i + 1;
+        $last-t: $t;
+        $last-v: $v;
+      }
+    }
+  }
+
+  @return _filter-function($transition-list, _is-valid-transition);
+}
+
+@function _is-valid-transition($item) {
+  $duration: map-get($item, duration);
+  $from: map-get($item, from);
+  $to: map-get($item, to);
+  @return $from != $to and $duration > 0;
+}
+
+@function _get-start-timings-from-transition-list($transition-list) {
+  @return _list-uniq(_map-function($transition-list, map-get, start));
+}
+
+@function _map-transition-list-into-content-property($transition-list) {
+  $message: "";
+  @each $item in $transition-list {
+    $selector: map-get($item, selector);
+    $start: map-get($item, start);
+    $duration: map-get($item, duration);
+    $end: $start + $duration;
+    $from: map-get($item, from);
+    $to: map-get($item, to);
+    $property: map-get($item, property);
+
+    @if $from != $to and $duration > 0 {
+      $append-line: "#{$selector} [#{$property}]: #{$start}::#{$from} → #{$end}::#{$to} (#{$duration})";
+      @if $message == "" {
+        $message: "#{$append-line}"
+      } @else {
+        $message: "#{$message}\a#{$append-line}"
+      }
+    }
+  }
+  @return $message;
+}
+
+
+@function _generate-debugger-animation($for-selector, $animation-map) {
+  $animation-map: _sort-map-keys-deep($animation-map);
+  $transition-list: _convert-animation-into-transition-list($animation-map);
+  $start-timings: _sort-list(_get-start-timings-from-transition-list($transition-list));
+
+  $tv-set: ();
+  $so-far-transition-stack: ();
+  @each $timing in $start-timings {
+    $transitions-with-start-timing: _filter-function(
+      $transition-list, _map-has-key-with-value, start, $timing
+    );
+    $so-far-transition-stack: join($so-far-transition-stack, $transitions-with-start-timing);
+    $tv-set: map-merge($tv-set, (
+      $timing: _map-transition-list-into-content-property($so-far-transition-stack)
+    ));
+  }
+
+  $duration: _calculate-animation-length($animation-map);
+  @return kf-ease(step-end, (
+    _kf-duration: $duration,
+    $for-selector: ('content': $tv-set)
+  ));
+}

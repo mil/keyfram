@@ -1,0 +1,47 @@
+@include describe('kf-stagger') {
+  @include it('Properly staggers animations with negative deltas') {
+    $input: (
+      ('.a': (background: (0ms: red, 2000ms: green))),
+      ('.b': (background: (0ms: blue, 1000ms: purple))),
+      ('.c': (background: (0ms: black, 1500ms: white))),
+    );
+    $expected-output: (
+      ".a": (background: (0ms: red, 2000ms: green)),
+      ".b": (background: (1500ms: blue, 2500ms: purple)),
+      ".c": (background: (2000ms: black, 3500ms: white)),
+      _kf-map-type: eptv,
+      _kf-duration: 3500ms,
+    );
+
+    @include assert-equal(
+      kf-stagger(-500ms, $input...),
+      $expected-output
+    );
+  }
+
+  @include it('Properly staggers animations with positive iterator') {
+    $input: (
+      ('.a': (background: (0ms: red, 50ms: green))),
+      ('.b': (background: (0ms: blue, 50ms: purple))),
+      ('.c': (background: (0ms: a, 100ms: b))),
+      ('.d': (background: (0ms: c, 100ms: d))),
+      ('.e': (background: (0ms: e, 100ms: f))),
+      ('.f': (background: (0ms: g, 100ms: h))),
+    );
+    $expected-output: (
+      ".a": (background: (0ms: red, 50ms: green)),
+      ".b": (background: (550ms: blue, 600ms: purple)),
+      ".c": (background: (1100ms: a, 1200ms: b)),
+      ".d": (background: (1700ms: c, 1800ms: d)),
+      ".e": (background: (2300ms: e, 2400ms: f)),
+      ".f": (background: (2900ms: g, 3000ms: h)),
+      _kf-map-type: eptv,
+      _kf-duration: 3000ms,
+    );
+
+    @include assert-equal(
+      kf-stagger(500ms, $input...),
+      $expected-output
+    );
+  }
+}
