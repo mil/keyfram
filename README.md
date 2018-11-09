@@ -20,7 +20,7 @@ You can use Kf for creating anything from simple button hovers to intricately ti
 - Small readable source-code & plently of [unit tests](/test)
 
 ## Installation & Basic Usage
-Grab the single-file distribution release or install via NPM:
+Grab the [single-file release](https://raw.githubusercontent.com/mil/kf-sass/master/dist/kf-1.0.0.scss) or install via NPM:
 ```bash
 npm install --save kf-sass
 ```
