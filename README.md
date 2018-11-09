@@ -29,7 +29,7 @@ Next, include in your SCSS file:
 @import 'relative/path-to/kf.scss';
 ```
 
-From here the most basic example would look like 
+From here the most basic example would look like:
 ```scss
 .sliding-box {
   $animation-map: ('div': ( margin-left: ( 0ms: 0%, 300ms: 30%, 2000ms: 100% ) ));
