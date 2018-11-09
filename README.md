@@ -21,7 +21,7 @@ You can use Kf for creating anything from simple button hovers to intricately ti
 ## Installation & Basic Usage
 Grab the single-file distribution release or install via NPM:
 ```bash
-npm install --save kf-scss
+npm install --save kf-sass
 ```
 
 Next, include in your SCSS file:
